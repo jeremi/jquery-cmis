@@ -13,6 +13,8 @@ everything starts by CMIS.parse(xml)
 see the jsdoc: http://jeremi.github.com/jquery-cmis/symbols/CMIS.html
 
 Links:
+======
+
 * jsdoc: http://jeremi.github.com/jquery-cmis/symbols/CMIS.html
 * eXo Platform: http://www.exoplatform.org
 * xCMIS: http://code.google.com/p/xcmis/
