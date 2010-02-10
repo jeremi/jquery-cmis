@@ -1,17 +1,28 @@
 
 (function(window, $){
+    var CMIS;
 	
+	/** 
+	    Holds all our CMIS code 
+	    @class 
+	*/
+	CMIS = {};
 	
-	
-	var CMIS = {};
-	
-	/* 
-	 * Wrap a Node of type Feed or Entry
+	/** 
+	    Wrap a Node of type Feed or Entry
+	    @class 
+	    @param node XMLNode of an entry or feed
 	 */
 	CMIS.Node = function(node) {
 		var that = this;
+		
+		/** The XML node wrapped. */
 		this.xmlNode = node;
+		
+		/** The title of the feed or Entry. */
 		this.title = this.xmlNode.children("title").eq(0).text();
+		
+		/** The properties of the feed or Entry. */
 		this.properties = {};
 		this._entry_cache_by_id = null;
 		this._entries_cache = null;
@@ -27,9 +38,7 @@
 		}
 	}
 	
-	/*
-	 * Get the links for the current Node
-	 */
+	/** Get the links for the current Node */
 	CMIS.Node.prototype.getLinks = function(rel, type) {
 		
 		var selector = "link", res = [];
@@ -46,45 +55,45 @@
 		return res;
 	}
 	
-	/*
-	 * Is the current Node is a feed?
+	/**
+	    Is the current Node is a feed?
 	 */
 	CMIS.Node.prototype.isFeed = function() {
 		return this.xmlNode.is("feed");
 	}
 	
-	/*
-	 * Is the current Node is an entry?
+	/** 
+	    Is the current Node is an entry?
 	 */
 	CMIS.Node.prototype.isEntry = function() {
 		return this.xmlNode.is("entry");
 	}
 	
-	/*
-	 * Is the base type of the current Node is a Folder?
+	/**
+	    Is the base type of the current Node is a Folder?
 	 */
 	CMIS.Node.prototype.isFolder = function() {
 		return this.properties["cmis:baseTypeId"] === "cmis:folder";
 	}
 	
-	/*
-	 * Return a property from the current Node
-	 * if the property does not exist, return null
+	/**
+	    Return a property from the current Node
+	    if the property does not exist, return null
 	 */
 	CMIS.Node.prototype.getProperty = function(key) {
 		return (key in this.properties ? this.properties[key] : null);
 	}
 	
-	/*
-	 * Return the parent ID from the current Node
-	 * if the Node has no parent, return null
+	/**
+	    Return the parent ID from the current Node
+	    if the Node has no parent, return null
 	 */
 	CMIS.Node.prototype.getParentId = function() {
 		return this.getProperty("cmis:parentId");
 	}
 	
-	/*
-	 * Return all the entries in a feed
+	/**
+	    Return all the entries in a feed
 	 */
 	CMIS.Node.prototype.getEntries = function() {
 		var that = this;
@@ -104,16 +113,16 @@
 	}
 
 
-    /*
-     * Return the URL of the content
-     * this is only useful if the node is an entry
+    /**
+        Return the URL of the content
+        this is only useful if the node is an entry
      */
 	CMIS.Node.prototype.getContentUrl = function() {
 		return this.xmlNode.children("content").attr("src");
 	}
 	
-	/*
-	 * Return the entry of a given ID from a feed
+	/**
+	    Return the entry of a given ID from a feed
 	 */
 	CMIS.Node.prototype.getEntry = function(id) {
 		if (!this.isFeed()) {
@@ -129,8 +138,9 @@
 		return id in this._entry_cache_by_id ? this._entry_cache_by_id[id] : null;
 	}
 
-    /*
-	 * Wrap a Workspace node
+    /**
+	    Wrap a Workspace node
+	    @class
 	 */
 	CMIS.Workspace = function(node) {
 	    var that = this;
@@ -151,8 +161,8 @@
 
 
 
-	/* 
-	 * Parse a feed or and entry
+	/**
+	    Parse a feed or and entry
 	 */
 	CMIS.parse = function(/* XMLDocument */ xml) {
 		if ($(xml).children("feed").length > 0) {

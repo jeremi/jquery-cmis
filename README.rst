@@ -9,7 +9,7 @@ It has been developed for the xCMIS_ implementation, but it is has been tested s
 Using it
 ========
 
-COMING SOON
+COMING SOON, but hint, start by CMIS.parse(XMLDocument)
 
 
 .. _xCMIS: http://code.google.com/p/xcmis/
