@@ -9,8 +9,14 @@ It has been developed for the xCMIS_ implementation, but it is has been tested s
 Using it
 ========
 
-COMING SOON, but hint, start by CMIS.parse(XMLDocument)
+everything starts by CMIS.parse(xml)
+see the jsdoc: http://jeremi.github.com/jquery-cmis/symbols/CMIS.html
 
+Links:
+* jsdoc: http://jeremi.github.com/jquery-cmis/symbols/CMIS.html
+* eXo Platform: http://www.exoplatform.org
+* xCMIS: http://code.google.com/p/xcmis/
+* CMIS: http://www.oasis-open.org/committees/cmis/
 
 .. _xCMIS: http://code.google.com/p/xcmis/
 .. _Chemistry: http://incubator.apache.org/chemistry/

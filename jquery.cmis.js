@@ -24,6 +24,7 @@
 		
 		/** The properties of the feed or Entry. */
 		this.properties = {};
+		
 		this._entry_cache_by_id = null;
 		this._entries_cache = null;
 
@@ -38,7 +39,10 @@
 		}
 	}
 	
-	/** Get the links for the current Node */
+	/** Get the links for the current Node
+	    @param {String} [rel] the relation kind of link is optional
+	    @param {String} [type] the type of the link is optional
+	 */
 	CMIS.Node.prototype.getLinks = function(rel, type) {
 		
 		var selector = "link", res = [];
@@ -79,6 +83,7 @@
 	/**
 	    Return a property from the current Node
 	    if the property does not exist, return null
+	    @param {String} key The propertyDefinitionId of the property
 	 */
 	CMIS.Node.prototype.getProperty = function(key) {
 		return (key in this.properties ? this.properties[key] : null);
@@ -123,6 +128,7 @@
 	
 	/**
 	    Return the entry of a given ID from a feed
+	    @param {String} id The id of a document (cmis:objectId if available)
 	 */
 	CMIS.Node.prototype.getEntry = function(id) {
 		if (!this.isFeed()) {
@@ -141,30 +147,49 @@
     /**
 	    Wrap a Workspace node
 	    @class
+	    @param node XMLNode of a Workspace
 	 */
 	CMIS.Workspace = function(node) {
 	    var that = this;
+	    
+	    /** The XML node wrapped. */
 	    this.xmlNode = node;
+	    
+	    /** The title of the workspace. */
 		this.title = this.xmlNode.children("title").eq(0).text();
+		
+		/** The link to collections indexed by collection type. */
 		this.collections = {};
 		this.xmlNode.children("collection").each(function(i, col) {
 		    that.collections[$(col).find("[nodeName=cmisra:collectionType]").eq(0).text()] = $(col).attr("href");
 		});
 	};
-
+    
+    /** The name of the vendor of this workspace */
     CMIS.Node.prototype.getVendorName = function() {
         return this.xmlNode.find("[nodeName=cmis:vendorName]").text()    
     }
 
+	/** Get the links for the Workspace
+	 	@function 
+	    @param {String} [rel] the relation kind of link is optional.
+	    @param {String} [type] the type of the link is optional.
+	 */
 	CMIS.Workspace.prototype.getLinks = CMIS.Node.prototype.getLinks;
+	
+	/**
+	    Is this is a workspace?
+	 */
 	CMIS.Workspace.prototype.isWorkspace = function(){return true};
 
 
 
 	/**
-	    Parse a feed or and entry
+	    Parse a feed or an entry
+	    @param {Document} xml the relation kind of link is optional.
+	    @returns {CMIS.Node|CMIS.Workspace[]} CMIS.Node or an array of CMIS.Workspace .
 	 */
-	CMIS.parse = function(/* XMLDocument */ xml) {
+	CMIS.parse = function(xml) {
 		if ($(xml).children("feed").length > 0) {
 			return new CMIS.Node($(xml).children("feed").eq(0));
 		} else if ($(xml).children("service").length > 0) {
